@@ -1,14 +1,30 @@
+#include <signal.h>
+
 #include "aimepcsc.h"
 #include <stdio.h>
 
+struct aimepcsc_context* ctx;
+
+void cleanup_and_exit(int signal) {
+    fprintf(stderr, "Received signal %d, shutting down...\n", signal);
+    if (ctx) {
+        aimepcsc_shutdown(ctx);
+        aimepcsc_destroy(ctx);
+    }
+    exit(0);
+}
+
 int main(int argc, char** argv) {
-    struct aimepcsc_context* ctx;
+
     int ret;
 
     ctx = aimepcsc_create();
     if (!ctx) {
         return -1;
     }
+
+    signal(SIGINT, cleanup_and_exit);
+    signal(SIGTERM, cleanup_and_exit);
 
     ret = aimepcsc_init(ctx);
     if (ret != 0) {
@@ -31,14 +47,14 @@ int main(int argc, char** argv) {
             printf("\n");
         } else if (ret == -1) {
             fprintf(stderr, "aimepcsc_poll failed: %s\n", aimepcsc_error(ctx));
-            break;
+            //break;
         }
 
         Sleep(500);
     }
 
+    // this never gets reached idk
     aimepcsc_shutdown(ctx);
     aimepcsc_destroy(ctx);
-
     return 0;
 }

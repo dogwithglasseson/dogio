@@ -1,7 +1,7 @@
 [binaries]
-c = 'x86_64-w64-mingw32-gcc'
-ar = 'x86_64-w64-mingw32-ar'
-strip = 'x86_64-w64-mingw32-strip'
+c = 'gcc'
+ar = 'ar'
+strip = 'strip'
 
 [host_machine]
 system = 'windows'

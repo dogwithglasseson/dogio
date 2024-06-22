@@ -1,16 +1,17 @@
-aimeio-pcsc
+dogio
 ---
 
-PC/SC-based Aime card reader for `segatools`. `aimeio-pcsc` allows you to use PC/SC compliant smart card readers as your Aime card reader in `segatools`. `aimeio-pcsc` only properly supports the old Mifare Classic 1K-based Aime cards.
+Hello gamers this is my fork of the [aimeio-pcsc project](https://github.com/Nat-Lab/aimeio-pcsc).  
+It exists because I wanted wider card support that ignored the nuances of authenticating NFC cards.  
 
-If you scan a newer AIC-based Aime, its FeliCa IDm will be provided to the game. The game will not see the correct "access code," but the IDm should be unique to each card so that particular card can still track your plays. 
-
-Tested on SONY's PaSoRi RC-S300. Other readers should, in theory, also work.
+Instead of authenticating and getting real card data we just grab the card's UID and add some extra garbage to use as an access code.  
+In theory this will now allow you to scan banapass (mifare 1k with some extra stank), generic mifare 1k classic, NTAG216, and some mifare ultralight cards.  
+More cards could be added!?  
+Amazing.  
 
 ### Usage
 
-To test if your card reader is supported, run `aimereader.exe` and try read your Aime card.
-
+To test if your card reader is supported, run `aimereader.exe` and try read your card.
 To use it with a game, copy `aimeio.dll` to your `segatools` folder and add the following to your `segatools.ini`:
 
 ```ini
@@ -19,10 +20,8 @@ path=aimeio.dll
 ```
 
 ### Build
-
-On Linux:
-
+I build on windows like a heathen, mileage on this may vary.
 ```sh
-meson setup --cross cross-mingw-64.txt b64
-ninja -C b64
+meson setup --cross cross-mingw.txt target
+ninja -C target
 ```
